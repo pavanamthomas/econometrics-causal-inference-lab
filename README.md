@@ -26,7 +26,9 @@ Copyright 2026 Dr. Pavanam Thomas · MIT License
 
 **Descriptive vs predictive vs causal.** Residual plots, cell means, and balance tables are descriptive. ROC/AUC and confusion matrices are predictive classification summaries. Causal language is used only when the estimand and identifying assumptions are stated and the estimator matches that estimand.
 
-**Inspect first (recruiters).** `CASE_STUDY.md`, `docs/causal_inference_checklist.md`, `src/econci/did.py`, `tests/`, `scripts/run_all.py`.
+**Inspect first (recruiters).** `CASE_STUDY.md`, `docs/failures_and_corrections.md`, `docs/causal_inference_checklist.md`, `ROADMAP.md`, `src/econci/did.py`, `tests/`, GitHub Issues.
+
+**Process.** Open work is `ROADMAP.md` and Issues. Failures the laboratory is designed to exhibit are `docs/failures_and_corrections.md`. A numerical change needs a test that would have failed before the change. CI on `main` checks that the laboratory still runs; it is not evidence about an application. See `docs/lab_process.md`.
 
 ## Summary
 
@@ -57,8 +59,12 @@ README.md
 LICENSE
 CITATION.cff
 pyproject.toml
+ROADMAP.md
+CONTRIBUTING.md
 CASE_STUDY.md
 docs/causal_inference_checklist.md
+docs/failures_and_corrections.md
+docs/lab_process.md
 docs/data_policy.md
 src/econci/          # package: dgp, ols, binary, panel, did, iv, rd, matching, plots
 scripts/run_all.py   # writes outputs/figures and outputs/tables
@@ -121,9 +127,9 @@ Assumptions are design-specific and are stated next to the corresponding module.
 ## Recruiter quick-start
 
 1. Read `CASE_STUDY.md` (one complete DiD argument, including what cannot be concluded).
-2. Skim `docs/causal_inference_checklist.md`.
+2. Skim `docs/failures_and_corrections.md` and `docs/causal_inference_checklist.md`.
 3. Open `src/econci/did.py` and `tests/test_did.py`.
-4. Run `pip install -e ".[dev]" && pytest -q && python scripts/run_all.py`.
+4. Run `pip install -e ".[dev]" && python -m pytest -q && python scripts/run_all.py`.
 5. If useful, `notebooks/01_ols_diagnostics.ipynb` and `notebooks/02_did_event_study.ipynb`.
 
 Related work (sparse): statistical protocol in [statistical-reasoning-validation](https://github.com/pavanamthomas/statistical-reasoning-validation); evaluation design in [ai-response-evaluation-benchmarks](https://github.com/pavanamthomas/ai-response-evaluation-benchmarks). Formal optimization arguments in Lean are a separate line of work ([lean4-optimization-economics](https://github.com/pavanamthomas/lean4-optimization-economics)) and are not modified here.

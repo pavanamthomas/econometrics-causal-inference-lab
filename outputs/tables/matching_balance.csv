@@ -1,0 +1,3 @@
+covariate,smd,weighted,stage
+x,1.1133468361985526,False,unweighted
+x,0.1351562012635363,True,ipw_att

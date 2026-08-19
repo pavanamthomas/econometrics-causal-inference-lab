@@ -1,0 +1,5 @@
+estimator,att
+naive_mean_difference,2.6615496185596936
+ipw_att,1.6466904802133797
+nn_ps_att,1.5980733531745235
+true_att,1.5

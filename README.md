@@ -1,5 +1,7 @@
 # Econometrics and Causal Inference Lab
 
+[![CI](https://github.com/pavanamthomas/econometrics-causal-inference-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/pavanamthomas/econometrics-causal-inference-lab/actions)
+
 Reproducible Python studies in econometrics, causal inference, diagnostics, robustness, and research-design validation.
 
 Dr. Pavanam Thomas  

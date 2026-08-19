@@ -1,0 +1,58 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "econci"
+version = "0.1.0"
+description = "Reproducible Python studies in econometrics, causal inference, diagnostics, robustness, and research-design validation."
+readme = "README.md"
+license = { text = "MIT" }
+authors = [
+    { name = "Dr. Pavanam Thomas", email = "thomaspavanam@gmail.com" },
+]
+maintainers = [
+    { name = "Dr. Pavanam Thomas", email = "thomaspavanam@gmail.com" },
+]
+requires-python = ">=3.11"
+dependencies = [
+    "numpy",
+    "pandas",
+    "scipy",
+    "statsmodels",
+    "scikit-learn",
+    "matplotlib",
+]
+keywords = [
+    "econometrics",
+    "causal-inference",
+    "difference-in-differences",
+    "instrumental-variables",
+    "regression-discontinuity",
+]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering",
+]
+
+[project.urls]
+Homepage = "https://github.com/pavanamthomas/econometrics-causal-inference-lab"
+Repository = "https://github.com/pavanamthomas/econometrics-causal-inference-lab"
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+addopts = "-q"

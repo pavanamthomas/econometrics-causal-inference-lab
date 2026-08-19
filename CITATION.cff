@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+message: If you use this repository, please cite it as below.
+type: software
+title: Econometrics and Causal Inference Lab
+abstract: Reproducible Python studies in econometrics, causal inference, diagnostics, robustness, and research-design validation. All samples are simulated from documented data-generating processes.
+authors:
+  - family-names: Thomas
+    given-names: Pavanam
+    email: thomaspavanam@gmail.com
+license: MIT
+version: 0.1.0
+date-released: "2026-08-19"
+repository-code: https://github.com/pavanamthomas/econometrics-causal-inference-lab

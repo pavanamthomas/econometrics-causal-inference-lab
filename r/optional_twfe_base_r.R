@@ -1,7 +1,8 @@
 # Optional base-R illustration of a two-by-two DiD regression
 #
-# This script is optional. It is not required for Python tests or for CI.
-# R is not assumed to be installed.
+# Python tests remain the required path. GitHub Actions also runs this
+# script in a separate job (`optional-r`) so the illustration cannot drift
+# silently. A local clone without R can still use the Python laboratory.
 #
 # The regression is the standard representation
 #   y ~ treated_group + post + treated_group:post

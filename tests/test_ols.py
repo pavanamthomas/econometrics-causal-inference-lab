@@ -22,6 +22,17 @@ def test_misspecification_diagnostic_fires_on_omitted_quadratic() -> None:
     assert reset["pvalue"] < 1e-4
 
 
+def test_quadratic_specification_recovers_known_curvature() -> None:
+    """Correction of the omitted-quadratic design: fit the term that was missing."""
+    df = dgp.simulate_ols_omitted_quadratic(n=1200, beta_x=0.4, beta_x2=1.4, seed=42)
+    corrected = ols.fit_ols(df, "y ~ x + x2")
+    assert abs(float(corrected.params["x2"]) - 1.4) < 0.12
+    assert abs(float(corrected.params["x"]) - 0.4) < 0.12
+    linear = ols.fit_ols(df, "y ~ x")
+    reset = ols.ramsey_reset(linear, power=3)
+    assert reset["pvalue"] < 1e-4
+
+
 def test_robust_se_and_influence_run() -> None:
     df = dgp.simulate_ols_heteroskedastic(n=500, seed=42)
     hc3 = ols.fit_ols(df, "y ~ x", cov_type="HC3")

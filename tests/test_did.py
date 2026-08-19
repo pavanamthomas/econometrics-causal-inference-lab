@@ -85,3 +85,23 @@ def test_staggered_twfe_can_miss_cohort_atts() -> None:
     assert abs(twfe_est - 4.0) > 0.8
     assert abs(twfe_est - (-1.5)) > 0.8
     assert np.isfinite(agg["att_simple"])
+
+
+def test_educational_group_time_recovers_cohort_signs() -> None:
+    """Correction of the TWFE reading: never-treated group-time cells keep signs."""
+    df = dgp.simulate_staggered_heterogeneous(
+        n_early=60,
+        n_late=60,
+        n_never=60,
+        att_early=4.0,
+        att_late=-1.5,
+        seed=42,
+    )
+    att_gt = did.group_time_att_educational(df)
+    early = float(att_gt.loc[att_gt["g"] == 4.0, "att_gt"].mean())
+    late = float(att_gt.loc[att_gt["g"] == 8.0, "att_gt"].mean())
+    assert early > 3.0
+    assert late < 0.0
+    twfe_est = float(did.fit_twfe_static(df).params["treated"])
+    assert abs(early - 4.0) < abs(twfe_est - 4.0)
+    assert abs(late - (-1.5)) < abs(twfe_est - (-1.5))

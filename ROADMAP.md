@@ -23,12 +23,11 @@ Details: `docs/failures_and_corrections.md`.
 
 ## Open (issues)
 
-Tracked as GitHub issues, not as silent placeholders in code:
+Tracked as GitHub issues, not as silent placeholders in code. Items below remain bounds after the corrections in `docs/failures_and_corrections.md`:
 
-1. Educational group-time ATT versus a production staggered estimator (Callaway–Sant’Anna or an equivalent). Out of the current dependency budget; the code must keep the “not CS” label until that changes.
-2. Weak-IV behaviour is flagged by first-stage F. A Stock–Yogo tabulation or Anderson–Rubin interval is not implemented.
-3. Optional `r/optional_twfe_base_r.R` is not in CI. R is not a required runtime.
-4. Clustered event-study inference with few treated clusters: the laboratory uses conventional clustering; wild cluster bootstrap is not implemented.
+1. Educational group-time ATT still uses never-treated units only. It is not Callaway–Sant’Anna inference.
+2. Stock–Yogo tabulations are not implemented; weak-IV correction is the Anderson–Rubin inversion.
+3. Wild cluster bootstrap with few treated clusters is not implemented.
 
 ## Explicitly not in scope
 

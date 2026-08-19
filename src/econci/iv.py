@@ -120,3 +120,69 @@ def assumptions_text() -> str:
         "which need not equal the ATE. The linear homogeneous DGP in this lab is a "
         "simplification in which that distinction collapses."
     )
+
+
+def anderson_rubin_pvalue(
+    df: pd.DataFrame,
+    beta0: float,
+    y: str = "y",
+    endog: str = "x",
+    instrument: str = "z",
+) -> float:
+    """Anderson–Rubin test of H0: structural slope = beta0 (just-identified IV).
+
+    Under the null and exclusion, y - beta0 * x is uncorrelated with z. The
+    test is the OLS F (equivalently t-squared) on z in that residual
+    regression. The statistic does not use first-stage F as a precision
+    claim, so it remains defined when the instrument is weak.
+    """
+    adj = df[y].to_numpy(dtype=float) - float(beta0) * df[endog].to_numpy(dtype=float)
+    z = sm.add_constant(df[[instrument]], has_constant="add")
+    fit = sm.OLS(adj, z).fit()
+    w = fit.f_test(f"{instrument} = 0")
+    return float(np.asarray(w.pvalue).squeeze())
+
+
+def anderson_rubin_interval(
+    df: pd.DataFrame,
+    grid: np.ndarray,
+    alpha: float = 0.05,
+    y: str = "y",
+    endog: str = "x",
+    instrument: str = "z",
+) -> dict[str, float]:
+    """Invert the Anderson–Rubin test over a grid of null values.
+
+    The reported interval is the smallest and largest grid points not
+    rejected at level `alpha`. Empty acceptance is returned as NaN bounds.
+    This is a grid inversion, not an analytic AR closed form.
+    """
+    if not 0.0 < alpha < 1.0:
+        raise ValueError("alpha must lie in (0, 1)")
+    accepted = [
+        float(b)
+        for b in np.asarray(grid, dtype=float).ravel()
+        if anderson_rubin_pvalue(df, float(b), y=y, endog=endog, instrument=instrument)
+        > alpha
+    ]
+    if not accepted:
+        return {"low": float("nan"), "high": float("nan"), "n_accepted": 0.0}
+    return {
+        "low": float(min(accepted)),
+        "high": float(max(accepted)),
+        "n_accepted": float(len(accepted)),
+    }
+
+
+def wald_interval_2sls(
+    est: dict[str, float | pd.DataFrame],
+    z: float = 1.95996398454,
+) -> tuple[float, float]:
+    """Textbook Wald interval from the 2SLS homoskedastic standard error.
+
+    Unreliable under weak instruments; kept as the object the AR interval
+    is meant to correct.
+    """
+    beta = float(est["beta_endog"])
+    se = float(est["se_endog"])
+    return beta - z * se, beta + z * se

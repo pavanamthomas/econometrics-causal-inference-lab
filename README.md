@@ -40,7 +40,7 @@ A 2x2 DiD recovers a known ATT when parallel trends hold by construction and is 
 
 - Specification, robust standard errors (HC1/HC3), heteroskedasticity tests, VIF, Cook's distance and leverage, Ramsey RESET and an added-quadratic test on a deliberately misspecified model
 - Logit and probit, average marginal effects, predicted probabilities, calibration; explicit separation from causal claims
-- Pooled OLS, entity fixed effects, feasible GLS random effects, clustered standard errors, within-unit interpretation; panel versus repeated cross-section
+- Pooled OLS, entity fixed effects, feasible GLS random effects, clustered standard errors, wild-cluster Rademacher percentile intervals on a few-treated-cluster DGP; panel versus repeated cross-section
 - DiD regression representation, event-study leads, joint pre-trend test, placebo timing, alternative comparison group, sensitivity to effect size and noise
 - First-stage F, 2SLS, weak-IV and exclusion-violation designs; LATE language kept distinct from a linear homogeneous teaching DGP
 - Sharp RD local linear estimation, bandwidth sensitivity, graphical bins, no-extrapolation warning

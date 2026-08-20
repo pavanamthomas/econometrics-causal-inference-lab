@@ -6,6 +6,7 @@ Current as of August 2026. This is a bound on the laboratory, not a product back
 
 - Simulated DGPs with documented assignment (OLS, binary, panel, 2x2 DiD, event study, staggered TWFE caution, IV, sharp RD, IPW/matching).
 - Tests that recover known parameters when the design is correctly specified, and that fail in the intended direction when it is not.
+- Wild-cluster Rademacher percentile intervals compared with cluster-robust Wald on a few-treated-cluster DGP.
 - Case study and design checklist: `CASE_STUDY.md`, `docs/causal_inference_checklist.md`.
 - CI: install, `python -m pytest`, `python scripts/run_all.py`.
 
@@ -23,15 +24,14 @@ Details: `docs/failures_and_corrections.md`.
 
 ## Remaining bounds
 
-GitHub issues #1–#4 were closed when the corresponding tests were added
+GitHub issues #1–#5 were closed when the corresponding tests were added
 (educational group-time cells, Anderson–Rubin inversion, quadratic
-specification recovery, optional-R CI job). The following are still
-unimplemented. They are bounds, not silent TODOs in the estimator code:
+specification recovery, optional-R CI job, wild-cluster Rademacher interval).
+The following are still bounds, not silent TODOs in the estimator code:
 
 1. Educational group-time ATT still uses never-treated units only. It is not Callaway–Sant’Anna inference.
 2. Stock–Yogo tabulations are not implemented; weak-IV correction is the Anderson–Rubin inversion.
-3. Wild cluster bootstrap with few treated clusters is not implemented
-   ([issue #5](https://github.com/pavanamthomas/econometrics-causal-inference-lab/issues/5)).
+3. The wild cluster interval uses Rademacher percentile coefficients, not Webb weights and not a restricted bootstrap-t.
 
 ## Explicitly not in scope
 

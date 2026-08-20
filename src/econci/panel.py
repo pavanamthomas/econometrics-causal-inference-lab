@@ -132,6 +132,77 @@ def hausman_fe_re(
     }
 
 
+def wild_cluster_rademacher_interval(
+    df: pd.DataFrame,
+    y_col: str,
+    x_cols: list[str],
+    entity_col: str,
+    coef_name: str,
+    n_boot: int = 199,
+    alpha: float = 0.05,
+    seed: int = 42,
+) -> dict[str, float | int | str | np.ndarray]:
+    """Percentile wild-cluster interval (Rademacher) for one OLS coefficient.
+
+    Restricted residual: y* = X bhat + u*, with u*_i = w_{g(i)} ehat_i and
+    w_g iid Rademacher, constant inside cluster g. This is the Cameron,
+    Gelbach and Miller (2008) transformation on the OLS residual, not Webb
+    weights, not the restricted wild bootstrap-t used in some DiD papers,
+    and not a correction for a misspecified mean.
+
+    The returned interval is the percentile interval of the bootstrap
+    coefficients. It is a different object from the cluster-robust Wald
+    interval on the original sample.
+    """
+    if n_boot < 20:
+        raise ValueError("n_boot must be at least 20")
+    if not 0.0 < alpha < 1.0:
+        raise ValueError("alpha must lie in (0, 1)")
+    y = df[y_col].astype(float).to_numpy()
+    x = sm.add_constant(df[x_cols].astype(float), has_constant="add")
+    groups = df[entity_col].to_numpy()
+    fit = sm.OLS(y, x).fit(cov_type="cluster", cov_kwds={"groups": groups})
+    if coef_name not in fit.params.index:
+        raise KeyError(f"{coef_name} is not a coefficient in the OLS fit")
+    bhat = fit.params.to_numpy(dtype=float)
+    ehat = np.asarray(fit.resid, dtype=float)
+    x_mat = np.asarray(x, dtype=float)
+    uniq = pd.unique(groups)
+    rng = np.random.default_rng(int(seed))
+    boots = np.empty(n_boot, dtype=float)
+    coef_i = list(fit.params.index).index(coef_name)
+    for b in range(n_boot):
+        weights = {g: float(rng.choice([-1.0, 1.0])) for g in uniq}
+        u_star = np.array([weights[g] * e for g, e in zip(groups, ehat)])
+        y_star = x_mat @ bhat + u_star
+        fit_b = sm.OLS(y_star, x_mat).fit()
+        boots[b] = float(fit_b.params[coef_i])
+    lower = float(np.quantile(boots, alpha / 2.0))
+    upper = float(np.quantile(boots, 1.0 - alpha / 2.0))
+    z = float(stats.norm.ppf(1.0 - alpha / 2.0))
+    se = float(fit.bse[coef_name])
+    coef = float(fit.params[coef_name])
+    n_treated = None
+    if "treated" in df.columns:
+        n_treated = int(df.groupby(entity_col)["treated"].max().sum())
+    return {
+        "coef": coef,
+        "se_cluster": se,
+        "wald_lower": coef - z * se,
+        "wald_upper": coef + z * se,
+        "wcb_lower": lower,
+        "wcb_upper": upper,
+        "n_boot": int(n_boot),
+        "n_clusters": int(len(uniq)),
+        "n_treated_clusters": -1 if n_treated is None else int(n_treated),
+        "replicates": boots,
+        "note": (
+            "Wild-cluster Rademacher percentile interval. Cluster-robust Wald "
+            "is reported alongside it and is not replaced by solver status."
+        ),
+    }
+
+
 def coef_row(label: str, results: sm.regression.linear_model.RegressionResultsWrapper, name: str) -> dict[str, float | str]:
     """Extract one named coefficient for comparison tables."""
     return {

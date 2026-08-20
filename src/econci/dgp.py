@@ -129,6 +129,44 @@ def simulate_panel(
     return pd.DataFrame(rows)
 
 
+def simulate_few_treated_clusters(
+    n_clusters: int = 8,
+    n_per_cluster: int = 16,
+    n_treated_clusters: int = 2,
+    beta: float = 1.0,
+    sigma_a: float = 2.5,
+    sigma_e: float = 1.0,
+    seed: int = DEFAULT_SEED,
+) -> pd.DataFrame:
+    """Cluster-level treatment with a small number of treated clusters.
+
+    y_ig = a_g + beta * d_g + e_ig. Treatment is constant inside a cluster.
+    Conventional cluster-robust Wald intervals for beta can undercover when
+    few clusters are treated. The laboratory uses this DGP to compare that
+    Wald interval with a wild cluster bootstrap, not as a real programme.
+    """
+    if not 1 <= n_treated_clusters < n_clusters:
+        raise ValueError("need at least one treated and one untreated cluster")
+    rng = make_rng(seed)
+    rows: list[dict[str, float | int]] = []
+    for g in range(n_clusters):
+        treated = int(g < n_treated_clusters)
+        a_g = float(rng.normal(0.0, sigma_a))
+        for _ in range(n_per_cluster):
+            e = float(rng.normal(0.0, sigma_e))
+            y = a_g + beta * treated + e
+            rows.append(
+                {
+                    "entity": int(g),
+                    "treated": treated,
+                    "y": y,
+                    "n_treated_clusters": int(n_treated_clusters),
+                    "true_beta": float(beta),
+                }
+            )
+    return pd.DataFrame(rows)
+
+
 def simulate_did_2x2(
     n_treat: int = 120,
     n_control: int = 120,

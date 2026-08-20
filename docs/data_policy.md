@@ -2,6 +2,10 @@
 
 Copyright 2026 Dr. Pavanam Thomas
 
+## Why the samples are simulated
+
+The laboratory is a known-truth design. A documented DGP makes an identifying assumption true or false by construction, so an estimator can be shown to recover the target or to fail in the intended direction. That is the point of the tests. It is not a substitute for an observational extract, and it is not a claim that a real programme has the same ATT.
+
 ## What this repository contains
 
 No observational microdata, administrative extracts, survey files, or scraped

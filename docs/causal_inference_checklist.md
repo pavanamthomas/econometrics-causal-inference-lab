@@ -3,9 +3,8 @@
 Copyright 2026 Dr. Pavanam Thomas
 
 This checklist is the laboratory's working protocol. It is a sequence of
-research decisions, not a menu of regression commands. Shared methodology:
-Problem → formalization → assumptions → computation/estimation → validation →
-interpretation → limitations.
+research decisions, not a menu of regression commands. Each item asks for an
+object that can be written down before software is run.
 
 ## 1. Research question
 

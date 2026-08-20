@@ -8,8 +8,9 @@ transfer program. Finite-sample numbers belong in `outputs/tables` after
 `python scripts/run_all.py`; they are not restated here as if they were
 empirical findings.
 
-Shared methodology: Problem → formalization → assumptions →
-computation/estimation → validation → interpretation → limitations.
+The walk-through below is one identification argument: research question,
+estimand, assignment, assumptions, estimator, checks, and a limited
+conclusion.
 
 ## 1. Research question
 

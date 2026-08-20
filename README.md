@@ -12,7 +12,7 @@ Copyright 2026 Dr. Pavanam Thomas · MIT License
 
 **Competencies.** Ordinary least squares with residual and influence diagnostics; binary response models with marginal effects separated from classification metrics; panel within-unit estimators; difference-in-differences (2x2, event study, placebo timing, staggered TWFE caution); instrumental variables (valid, weak, and invalid designs); sharp regression discontinuity; propensity-score weighting and matching.
 
-**Methods.** Statsmodels for likelihood and least squares; transparent 2SLS and two-way demeaning; local linear RD; logistic propensity scores with IPW and nearest-neighbour matching. Shared workflow: Problem → formalization → assumptions → computation/estimation → validation → interpretation → limitations.
+**Methods.** Statsmodels for likelihood and least squares; transparent 2SLS and two-way demeaning; local linear RD; logistic propensity scores with IPW and nearest-neighbour matching. Identification is stated before estimation; interpretation is limited to the design that was actually written down.
 
 **Data.** All samples are simulated from documented data-generating processes in `src/econci/dgp.py` (`numpy.random.Generator`, default seed 42). Nothing here is observational microdata. Finite-sample tables and figures are computational artifacts, not empirical findings.
 
@@ -26,7 +26,7 @@ Copyright 2026 Dr. Pavanam Thomas · MIT License
 
 **Descriptive vs predictive vs causal.** Residual plots, cell means, and balance tables are descriptive. ROC/AUC and confusion matrices are predictive classification summaries. Causal language is used only when the estimand and identifying assumptions are stated and the estimator matches that estimand.
 
-**Inspect first (recruiters).** `CASE_STUDY.md`, `docs/failures_and_corrections.md`, `docs/causal_inference_checklist.md`, `ROADMAP.md`, `src/econci/did.py`, `tests/`, GitHub Issues.
+**Inspect first.** `CASE_STUDY.md`, `docs/failures_and_corrections.md`, `docs/causal_inference_checklist.md`, `ROADMAP.md`, `src/econci/did.py`, `tests/`.
 
 **Process.** Open work is `ROADMAP.md` and Issues. Failures the laboratory is designed to exhibit are `docs/failures_and_corrections.md`. A numerical change needs a test that would have failed before the change. CI on `main` checks that the laboratory still runs; it is not evidence about an application. See `docs/lab_process.md`.
 
@@ -48,9 +48,7 @@ A 2x2 DiD recovers a known ATT when parallel trends hold by construction and is 
 
 ## Methodology
 
-Problem → formalization → assumptions → computation/estimation → validation → interpretation → limitations.
-
-The protocol is written out in `docs/causal_inference_checklist.md`. Estimation without that sequence is treated as incomplete.
+The protocol is written out in `docs/causal_inference_checklist.md`. Estimation without an estimand and identifying assumptions is treated as incomplete.
 
 ## Structure
 
@@ -88,7 +86,7 @@ python scripts/run_all.py
 
 CI (`.github/workflows/ci.yml`): `ubuntu-latest`, Python 3.11, `pip install -e ".[dev]"`, `pytest -q`, `python scripts/run_all.py`.
 
-Optional R script: `r/optional_twfe_base_r.R` illustrates the same 2x2 regression in base R. It is not used by tests or CI.
+Optional R script: `r/optional_twfe_base_r.R` illustrates the same 2x2 regression in base R. The `optional-r` GitHub Actions job runs `Rscript` on that file. Python tests remain the required local path; R is not needed to run `pytest`.
 
 ## Example outputs
 
@@ -124,7 +122,7 @@ Assumptions are design-specific and are stated next to the corresponding module.
 - Sharp RD does not identify effects away from the cutoff.
 - Valid 2SLS in the linear homogeneous DGP is not a license to treat 2SLS as ATE in an application where LATE is the relevant parameter.
 
-## Recruiter quick-start
+## Case study and reproduction
 
 1. Read `CASE_STUDY.md` (one complete DiD argument, including what cannot be concluded).
 2. Skim `docs/failures_and_corrections.md` and `docs/causal_inference_checklist.md`.

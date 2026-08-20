@@ -4,31 +4,22 @@
 
 Reproducible Python studies in econometrics, causal inference, diagnostics, robustness, and research-design validation.
 
-Dr. Pavanam Thomas  
-GitHub: [pavanamthomas](https://github.com/pavanamthomas) · thomaspavanam@gmail.com  
-Copyright 2026 Dr. Pavanam Thomas · MIT License
+Dr. Pavanam Thomas · [pavanamthomas](https://github.com/pavanamthomas) · thomaspavanam@gmail.com  
+Copyright 2026 · MIT License
 
-**Problem.** Applied work often reports a regression coefficient as if it were an identified treatment effect. This repository treats identification as a research-design claim: a research question, an estimand, an assignment process, and explicit assumptions, followed by estimation, diagnostics, robustness, and a limited interpretation.
+Applied work often reports a regression coefficient as if it were an identified treatment effect. This laboratory treats identification as a research-design claim: a question, an estimand, an assignment process, and explicit assumptions, then estimation, diagnostics, robustness, and a limited interpretation.
 
-**Competencies.** Ordinary least squares with residual and influence diagnostics; binary response models with marginal effects separated from classification metrics; panel within-unit estimators; difference-in-differences (2x2, event study, placebo timing, staggered TWFE caution); instrumental variables (valid, weak, and invalid designs); sharp regression discontinuity; propensity-score weighting and matching.
+The package covers OLS with residual and influence diagnostics; logit and probit with average marginal effects kept separate from classification metrics; entity fixed effects; 2x2 DiD, event study, placebo timing, and a staggered TWFE caution; 2SLS including weak and invalid instruments, with Anderson–Rubin inversion when the first stage is weak; sharp local linear RD; IPW and nearest-neighbour matching; and a wild-cluster Rademacher percentile interval on a few-treated-cluster DGP. Statsmodels is used for likelihood and least squares; 2SLS and two-way demeaning are written out.
 
-**Methods.** Statsmodels for likelihood and least squares; transparent 2SLS and two-way demeaning; local linear RD; logistic propensity scores with IPW and nearest-neighbour matching. Identification is stated before estimation; interpretation is limited to the design that was actually written down.
+All samples are simulated from documented DGPs in `src/econci/dgp.py` (`numpy.random.Generator`, default seed 42). They are not observational microdata. Finite-sample tables and figures are computational artifacts. Each design states the condition that maps identifying variation to an estimand (parallel trends, exclusion, continuity at a cutoff, unconfoundedness and overlap). Conventional TWFE is not automatically valid under heterogeneous staggered treatment. Residual plots and balance tables are descriptive; ROC/AUC is a classification summary. Causal language is used only when the estimand and identifying assumptions are stated and the estimator matches that estimand.
 
-**Data.** All samples are simulated from documented data-generating processes in `src/econci/dgp.py` (`numpy.random.Generator`, default seed 42). Nothing here is observational microdata. Finite-sample tables and figures are computational artifacts, not empirical findings.
+Start with `CASE_STUDY.md`, `docs/failures_and_corrections.md`, `docs/causal_inference_checklist.md`, `ROADMAP.md`, `src/econci/did.py`, and `tests/`. Remaining bounds are in `ROADMAP.md` (issues #1–#5 are closed). Failures the laboratory is designed to exhibit stay in `docs/failures_and_corrections.md`. A numerical change needs a test that would have failed before the change. CI on `main` runs pytest, `python scripts/run_all.py`, and an optional base-R 2x2 DiD job; that is not evidence about an application. See `docs/lab_process.md`.
 
-**Assumptions.** Each design states the condition that maps identifying variation to an estimand (parallel trends, exclusion, continuity at a cutoff, unconfoundedness and overlap). Conventional two-way fixed effects is not automatically valid under heterogeneous staggered treatment.
-
-**Reproduce.** `pip install -e ".[dev]"` then `pytest -q` and `python scripts/run_all.py`.
-
-**Tests and CI.** Pytest checks recovery on known DGPs, misspecification diagnostics, IV contrast designs, DiD under and against parallel trends, RD local versus far comparisons, matching balance, and event-study treatment coding. GitHub Actions runs the same commands on Python 3.11.
-
-**Limitations.** Simulations can make an assumption true by construction; they cannot show that the assumption holds in an application. See [Limitations](#limitations).
-
-**Descriptive vs predictive vs causal.** Residual plots, cell means, and balance tables are descriptive. ROC/AUC and confusion matrices are predictive classification summaries. Causal language is used only when the estimand and identifying assumptions are stated and the estimator matches that estimand.
-
-**Inspect first.** `CASE_STUDY.md`, `docs/failures_and_corrections.md`, `docs/causal_inference_checklist.md`, `ROADMAP.md`, `src/econci/did.py`, `tests/`.
-
-**Process.** Open work is `ROADMAP.md` and Issues. Failures the laboratory is designed to exhibit are `docs/failures_and_corrections.md`. A numerical change needs a test that would have failed before the change. CI on `main` checks that the laboratory still runs; it is not evidence about an application. See `docs/lab_process.md`.
+```bash
+pip install -e ".[dev]"
+pytest -q
+python scripts/run_all.py
+```
 
 ## Summary
 
@@ -36,7 +27,7 @@ The laboratory is a source-layout Python package (`econci`) plus a case study, a
 
 A 2x2 DiD recovers a known ATT when parallel trends hold by construction and is biased when they do not. An event-study construction codes the static treatment dummy as 0 in pre-adoption periods (no future-treatment leakage). A staggered-adoption simulation with opposite-signed cohort ATTs shows that conventional TWFE need not recover those cohort effects. An educational group-time ATT aggregation is labelled as such; it is not a production Callaway–Sant'Anna estimator.
 
-## Skills
+## Designs in the package
 
 - Specification, robust standard errors (HC1/HC3), heteroskedasticity tests, VIF, Cook's distance and leverage, Ramsey RESET and an added-quadratic test on a deliberately misspecified model
 - Logit and probit, average marginal effects, predicted probabilities, calibration; explicit separation from causal claims
